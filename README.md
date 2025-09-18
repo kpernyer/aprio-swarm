@@ -1,33 +1,68 @@
 # Living Twin Swarm System
 
-Part of the Living Twin AI Agent Portfolio system.
+High-performance Rust-based distributed worker system for the Living Twin AI platform.
 
 ## Overview
 
-This repository contains focused components for the Living Twin platform:
+The swarm system provides distributed processing capabilities optimized for:
 
-- Clean separation of concerns
-- Independent development and deployment
-- Optimized for domain-specific requirements
+- **Document Processing**: High-speed document analysis and indexing
+- **Vector Operations**: Efficient vector database operations
+- **Real-time Analysis**: Stream processing for live data
+- **ML Inference**: Distributed machine learning model serving
+
+## Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ Swarm           │    │ Task            │    │ Worker          │
+│ Coordinator     │───▶│ Scheduler       │───▶│ Pool            │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│ Communication   │    │ Storage         │    │ Metrics         │
+│ Layer           │    │ Layer           │    │ Collection      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
 
 ## Quick Start
 
 ```bash
-# Install dependencies
-npm install  # or cargo build for Rust
+# Build the workspace
+cargo build --release
 
-# Start development
-npm run dev  # or cargo run for Rust
+# Run basic swarm example
+cargo run --example basic-swarm
+
+# Run document processor worker
+cargo run --bin document-processor
+
+# Run benchmarks
+cargo bench
 ```
 
-## Documentation
+## Performance Goals
 
-See the [docs/](./docs/) directory for detailed documentation.
+- **Throughput**: 10,000+ documents/second processing
+- **Latency**: Sub-10ms response times for simple operations
+- **Scalability**: Linear scaling across worker nodes
+- **Efficiency**: Minimal resource overhead
 
-## Contributing
+## Integration
 
-Please read our contributing guidelines and code of conduct.
+The swarm system integrates with the Living Twin Agentic Framework:
 
-## License
+```rust
+use swarm_core::prelude::*;
 
-UNLICENSED - Proprietary software
+// High-performance document processing for agents
+let result = swarm.process_document(document).await?;
+
+// Vector indexing for intelligence agents
+let index_result = swarm.index_vectors(vectors).await?;
+```
+
+## Development
+
+See [docs/](./docs/) for detailed development guides and architecture documentation.
