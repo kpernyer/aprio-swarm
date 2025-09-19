@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprio Swarm System - Architecture Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .diagram-container {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .mermaid {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Aprio Swarm System Architecture</h1>
+        
+        <div class="diagram-container">
+            <h2>System Flow Diagram</h2>
+            <div class="mermaid">
+graph TB
+    subgraph "Client Layer"
+        A[Task Submission] --> B[SwarmCoordinator]
+    end
+    
+    subgraph "Coordination Layer"
+        B --> C[Task Queue]
+        B --> D[Worker Registry]
+        B --> E[Result Processor]
+    end
+    
+    subgraph "Worker Pool"
+        F[Document Processor<br/>Worker 1]
+        G[ML Inference<br/>Worker 2]
+        H[Vector Indexer<br/>Worker N]
+    end
+    
+    subgraph "Task Processing"
+        I[Echo Tasks<br/>100ms]
+        J[Compute Tasks<br/>200ms]
+        K[Error Tasks<br/>50ms]
+    end
+    
+    C --> F
+    C --> G
+    C --> H
+    
+    F --> I
+    G --> J
+    H --> K
+    
+    I --> E
+    J --> E
+    K --> E
+    
+    E --> L[Task Results]
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style F fill:#e8f5e8
+    style G fill:#e8f5e8
+    style H fill:#e8f5e8
+    style L fill:#fff3e0
+            </div>
+        </div>
+
+        <div class="diagram-container">
+            <h2>Task Flow Sequence</h2>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Coordinator
+    participant Worker1
+    participant Worker2
+    participant Results
+    
+    Client->>Coordinator: Submit Task 1 (Echo)
+    Client->>Coordinator: Submit Task 2 (Compute)
+    Client->>Coordinator: Submit Task 3 (Error)
+    
+    Coordinator->>Worker1: Distribute Task 1
+    Coordinator->>Worker2: Distribute Task 2
+    Coordinator->>Worker1: Distribute Task 3
+    
+    Worker1->>Worker1: Process Echo (100ms)
+    Worker2->>Worker2: Process Compute (200ms)
+    Worker1->>Worker1: Process Error (50ms)
+    
+    Worker1->>Results: Task 1 Complete
+    Worker2->>Results: Task 2 Complete
+    Worker1->>Results: Task 3 Failed
+    
+    Results->>Coordinator: Report Results
+    Coordinator->>Client: All Tasks Processed
+            </div>
+        </div>
+
+        <div class="diagram-container">
+            <h2>Performance Timeline</h2>
+            <div class="mermaid">
+gantt
+    title Task Processing Timeline
+    dateFormat X
+    axisFormat %L ms
+    
+    section Worker 1
+    Echo Task 1    :done, task1, 0, 102
+    Error Task     :done, task3, 102, 152
+    
+    section Worker 2
+    Compute Task 1 :done, task2, 0, 200
+    Compute Task 2 :done, task5, 200, 401
+            </div>
+        </div>
+
+        <div class="diagram-container">
+            <h2>System Components</h2>
+            <div class="mermaid">
+graph LR
+    subgraph "Core Components"
+        A[SwarmCoordinator]
+        B[SwarmWorker]
+        C[Task]
+        D[TaskResult]
+    end
+    
+    subgraph "Communication"
+        E[Task Channels]
+        F[Result Channels]
+    end
+    
+    subgraph "Configuration"
+        G[WorkerConfig]
+        H[TaskPriority]
+    end
+    
+    A --> E
+    A --> F
+    B --> E
+    B --> F
+    C --> G
+    D --> H
+    
+    style A fill:#ffebee
+    style B fill:#e8f5e8
+    style C fill:#e3f2fd
+    style D fill:#fff3e0
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#3498db',
+                primaryTextColor: '#2c3e50',
+                primaryBorderColor: '#2980b9',
+                lineColor: '#34495e',
+                secondaryColor: '#ecf0f1',
+                tertiaryColor: '#ffffff'
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,15 +2,8 @@
 members = [
     "crates/swarm-core",
     "crates/swarm-worker",
-    "crates/swarm-scheduler",
-    "crates/swarm-comms",
-    "crates/swarm-storage",
-    "crates/swarm-metrics",
-    "workers/document-processor",
-    "workers/vector-indexer",
-    "workers/real-time-analyzer",
-    "workers/ml-inference",
-    "examples/basic-swarm"
+    "examples/basic-swarm",
+    "examples/enhanced-worker-system"
 ]
 
 [workspace.dependencies]
@@ -22,9 +15,10 @@ thiserror = "1.0"
 clap = { version = "4.0", features = ["derive"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
-uuid = { version = "1.0", features = ["v4"] }
+uuid = { version = "1.0", features = ["v4", "serde"] }
 redis = "0.23"
 reqwest = { version = "0.11", features = ["json"] }
+chrono = { version = "0.4", features = ["serde"] }
 
 [profile.release]
 lto = true

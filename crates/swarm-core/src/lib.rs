@@ -1,6 +1,6 @@
 //! Swarm Core - Distributed worker coordination system
 //!
-//! High-performance Rust-based worker system for the Living Twin platform.
+//! High-performance Rust-based worker system for the Aprio platform.
 //! Provides distributed processing capabilities for AI agents.
 
 pub mod coordinator;
@@ -10,12 +10,12 @@ pub mod error;
 
 pub use coordinator::SwarmCoordinator;
 pub use worker::{Worker, WorkerConfig, WorkerStatus};
-pub use task::{Task, TaskResult, TaskStatus};
+pub use task::{Task, TaskResult, TaskStatus, TaskPriority};
 pub use error::{SwarmError, SwarmResult};
 
 /// Core traits and types for the swarm system
 pub mod prelude {
     pub use crate::{SwarmCoordinator, Worker, WorkerConfig, WorkerStatus};
-    pub use crate::{Task, TaskResult, TaskStatus};
+    pub use crate::{Task, TaskResult, TaskStatus, TaskPriority};
     pub use crate::{SwarmError, SwarmResult};
 }
