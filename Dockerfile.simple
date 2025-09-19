@@ -1,0 +1,12 @@
+# Simple Dockerfile that copies pre-built binaries
+FROM scratch
+
+# Copy the pre-built binaries
+COPY target/release/nats-publisher /app/nats-publisher
+COPY target/release/nats-subscriber /app/nats-subscriber
+
+# Set working directory
+WORKDIR /app
+
+# Default command
+CMD ["./nats-subscriber"]

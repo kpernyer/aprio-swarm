@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  nats:
+    image: nats:2.11-alpine
+    ports:
+      - "4222:4222"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8222/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile.minimal
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=info
+    command: ["./nats-publisher"]
+    restart: unless-stopped
+
+  subscriber:
+    build:
+      context: .
+      dockerfile: Dockerfile.minimal
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=info
+    command: ["./nats-subscriber"]
+    restart: unless-stopped

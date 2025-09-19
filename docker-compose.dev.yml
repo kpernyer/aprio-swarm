@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # NATS Server for development
+  nats:
+    image: nats:2.11-alpine
+    container_name: aprio-nats-dev
+    ports:
+      - "4222:4222"
+      - "8222:8222"  # HTTP monitoring
+    command: ["--port", "4222", "--http_port", "8222", "--jetstream"]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8222/varz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aprio-dev-network
+
+  # Development publisher (runs once)
+  publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: aprio-publisher-dev
+    command: ["./nats-publisher"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=debug
+    volumes:
+      - ./test-data:/app/test-data:ro
+    networks:
+      - aprio-dev-network
+    restart: "no"
+
+  # Development subscriber
+  subscriber:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: aprio-subscriber-dev
+    command: ["./nats-subscriber"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=debug
+    volumes:
+      - ./test-data:/app/test-data:ro
+    networks:
+      - aprio-dev-network
+    restart: unless-stopped
+
+networks:
+  aprio-dev-network:
+    driver: bridge

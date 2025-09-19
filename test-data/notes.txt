@@ -1,0 +1,38 @@
+Meeting Notes - Project Planning Session
+
+Date: 2024-01-15
+Attendees: John, Sarah, Mike, Lisa
+
+## Agenda Items
+1. Document processing requirements
+2. Worker architecture design
+3. NATS integration planning
+4. Performance targets
+
+## Key Decisions
+- Use Rust for high-performance processing
+- Implement capability-based worker routing
+- Target 10,000+ documents per second
+- Support PDF, Word, Text, HTML, Markdown formats
+
+## Action Items
+- [ ] Design document reader component
+- [ ] Implement real file parsing (not just string simulation)
+- [ ] Create NATS message schemas
+- [ ] Build worker startup and capability selection
+- [ ] Test with real document files
+
+## Technical Notes
+The system needs to handle:
+- Large document files (up to 100MB)
+- Mixed document type streams
+- Error recovery and retry logic
+- Worker health monitoring
+- Dynamic scaling based on load
+
+## Next Steps
+1. Create test data directory with real files
+2. Build document reader that watches directories
+3. Implement actual document parsing libraries
+4. Design worker capability selection system
+5. Integrate with NATS for messaging

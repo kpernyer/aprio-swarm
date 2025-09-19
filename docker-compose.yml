@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  # NATS Server
+  nats:
+    image: nats:2.11-alpine
+    container_name: aprio-nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"  # HTTP monitoring
+    command: ["--port", "4222", "--http_port", "8222", "--jetstream"]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8222/varz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - aprio-network
+
+  # Document Publisher
+  publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aprio-publisher
+    command: ["./nats-publisher"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=info
+    networks:
+      - aprio-network
+    restart: "no"
+
+  # Document Subscriber 1
+  subscriber1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aprio-subscriber-1
+    command: ["./nats-subscriber"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=info
+    networks:
+      - aprio-network
+    restart: unless-stopped
+
+  # Document Subscriber 2
+  subscriber2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aprio-subscriber-2
+    command: ["./nats-subscriber"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=info
+    networks:
+      - aprio-network
+    restart: unless-stopped
+
+  # Simple Document Demo
+  demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aprio-demo
+    command: ["./simple-document-demo"]
+    depends_on:
+      nats:
+        condition: service_healthy
+    environment:
+      - RUST_LOG=info
+    networks:
+      - aprio-network
+    restart: "no"
+
+networks:
+  aprio-network:
+    driver: bridge
+
+volumes:
+  nats-data:
+    driver: local

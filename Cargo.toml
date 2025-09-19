@@ -1,9 +1,14 @@
 [workspace]
+resolver = "2"
 members = [
     "crates/swarm-core",
-    "crates/swarm-worker",
-    "examples/basic-swarm",
-    "examples/enhanced-worker-system"
+    "crates/swarm-documents",
+    "crates/swarm-comms",
+    "examples/simple-document-demo",
+    "examples/nats-demo",
+    "examples/nats-publisher",
+    "examples/nats-subscriber",
+    "examples/simple-test"
 ]
 
 [workspace.dependencies]

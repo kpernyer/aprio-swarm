@@ -1,0 +1,24 @@
+# Sample Text Document
+
+This is a simple text document for testing our document processing system.
+
+## Key Information
+- Document Type: Plain Text
+- Purpose: Testing text processing capabilities
+- Content: Basic text with some structure
+
+## Processing Requirements
+The system should be able to:
+1. Extract all text content
+2. Count words accurately
+3. Detect language (English)
+4. Extract keywords
+5. Preserve formatting structure
+
+This document contains multiple paragraphs and some basic formatting to test the text processing worker's capabilities.
+
+## Expected Results
+- Word count: Approximately 50-60 words
+- Language: English (en)
+- Keywords: document, processing, system, text, testing
+- No page count (text documents don't have pages)

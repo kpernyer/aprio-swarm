@@ -1,0 +1,29 @@
+# Multi-stage build for standalone test
+FROM rust:1.80-alpine AS builder
+
+# Install musl-dev for static linking
+RUN apk add --no-cache musl-dev
+
+# Set target for static linking (use native target)
+ENV RUSTFLAGS="-C target-feature=+crt-static"
+
+# Create app directory
+WORKDIR /app
+
+# Copy the standalone test
+COPY examples/simple-test/ ./
+
+# Build the simple test
+RUN cargo build --release
+
+# Final stage - FROM scratch for minimal size
+FROM scratch
+
+# Copy the statically linked binary
+COPY --from=builder /app/target/release/simple-test /app/simple-test
+
+# Set working directory
+WORKDIR /app
+
+# Default command
+CMD ["./simple-test"]

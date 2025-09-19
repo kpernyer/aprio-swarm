@@ -1,0 +1,35 @@
+# Git
+.git
+.gitignore
+
+# Rust
+target/debug/
+target/incremental/
+Cargo.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Documentation
+docs/
+README.md
+
+# Scripts
+scripts/
+test-nats.sh
+
+# Deployments
+deployments/
+
+# Test data (will be mounted as volume)
+test-data/

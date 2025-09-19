@@ -70,8 +70,8 @@ impl SwarmCoordinator {
                         crate::TaskStatus::Completed => {
                             info!("Task {} completed in {}ms", result.task_id, result.processing_time_ms);
                         }
-                        crate::TaskStatus::Failed(ref error) => {
-                            error!("Task {} failed: {}", result.task_id, error);
+                        crate::TaskStatus::Failed => {
+                            error!("Task {} failed", result.task_id);
                         }
                         _ => {}
                     }

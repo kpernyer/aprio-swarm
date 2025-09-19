@@ -1,9 +1,10 @@
 [package]
-name = "swarm-core"
+name = "swarm-documents"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+swarm-core = { path = "../swarm-core" }
 tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
@@ -16,3 +17,4 @@ async-trait = "0.1"
 
 [dev-dependencies]
 tempfile = "3.0"
+tokio-test = "0.4"

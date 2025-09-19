@@ -1,0 +1,136 @@
+TECHNICAL MANUAL - Document Processing System
+
+Table of Contents
+================
+
+1. System Overview
+2. Installation Guide
+3. Configuration
+4. API Reference
+5. Troubleshooting
+6. Performance Tuning
+
+1. System Overview
+=================
+
+The Aprio Swarm Document Processing System is a distributed, high-performance platform for processing large volumes of documents. The system uses a microservices architecture with NATS messaging for communication between components.
+
+Architecture Components:
+- Document Reader: Monitors directories and publishes documents to NATS
+- Task Generator: Creates processing tasks based on document type
+- Worker Pool: Executes document processing tasks
+- Result Aggregator: Collects and stores processing results
+
+2. Installation Guide
+====================
+
+Prerequisites:
+- Rust 1.70+ installed
+- NATS server running
+- PostgreSQL database (optional)
+- Docker (for containerized deployment)
+
+Installation Steps:
+1. Clone the repository
+2. Build the workspace: cargo build --release
+3. Configure NATS connection
+4. Start the document reader
+5. Start worker processes
+6. Monitor system health
+
+3. Configuration
+===============
+
+The system uses a YAML configuration file:
+
+```yaml
+nats:
+  url: "nats://localhost:4222"
+  cluster: "swarm-cluster"
+
+document_reader:
+  watch_directories: ["/data/documents"]
+  supported_formats: ["pdf", "docx", "txt", "html", "md"]
+  batch_size: 100
+
+workers:
+  text_processor:
+    count: 5
+    capabilities: ["text_extraction", "language_detection"]
+  document_analyzer:
+    count: 3
+    capabilities: ["content_analysis", "classification"]
+  vector_indexer:
+    count: 2
+    capabilities: ["vector_indexing", "similarity_search"]
+```
+
+4. API Reference
+===============
+
+Document Processing API:
+
+POST /api/documents/process
+- Body: Document metadata and content
+- Response: Processing job ID
+
+GET /api/jobs/{job_id}/status
+- Response: Job status and results
+
+GET /api/documents/{document_id}/results
+- Response: Processed document results
+
+5. Troubleshooting
+=================
+
+Common Issues:
+
+Issue: Workers not processing documents
+Solution: Check NATS connection and worker capabilities
+
+Issue: High memory usage
+Solution: Reduce batch size or increase worker count
+
+Issue: Slow processing times
+Solution: Check worker capacity and load balancing
+
+Issue: Document parsing errors
+Solution: Verify document format support and file integrity
+
+6. Performance Tuning
+====================
+
+Optimization Strategies:
+
+1. Worker Scaling:
+   - Monitor worker utilization
+   - Scale workers based on document type distribution
+   - Use specialized workers for different document types
+
+2. Memory Management:
+   - Stream large documents instead of loading entirely
+   - Implement document chunking for processing
+   - Use memory pools for frequent allocations
+
+3. Network Optimization:
+   - Use NATS clustering for high availability
+   - Implement message batching
+   - Optimize serialization formats
+
+4. Storage Optimization:
+   - Use efficient document storage formats
+   - Implement result caching
+   - Optimize database queries
+
+Performance Monitoring:
+- Document processing rate
+- Worker utilization
+- Memory usage
+- Network latency
+- Error rates
+
+The system provides comprehensive monitoring through Prometheus metrics and Grafana dashboards.
+
+Document Version: 1.0
+Last Updated: March 2024
+Maintained by: Engineering Team

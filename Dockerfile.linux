@@ -1,0 +1,32 @@
+# Multi-stage build for Linux binaries
+FROM rust:nightly-alpine AS builder
+
+# Install musl-dev for static linking
+RUN apk add --no-cache musl-dev
+
+# Set target for static linking
+ENV RUSTFLAGS="-C target-feature=+crt-static"
+
+# Create app directory
+WORKDIR /app
+
+# Copy manifests
+COPY Cargo.toml ./
+COPY crates/ ./crates/
+COPY examples/ ./examples/
+
+# Build the specific examples we need for Linux
+RUN cargo build --release --target x86_64-unknown-linux-musl --package nats-publisher --package nats-subscriber
+
+# Final stage - FROM scratch for minimal size
+FROM scratch
+
+# Copy the statically linked binary
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/nats-subscriber /app/nats-subscriber
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/nats-publisher /app/nats-publisher
+
+# Set working directory
+WORKDIR /app
+
+# Default command
+CMD ["./nats-subscriber"]
